@@ -1,0 +1,154 @@
+//__________EXPT1_________________
+//__AIM: Creating a private Ethereum blockchain involves setting up a local or private network that is separate from the public Ethereum network.
+//__Steps:
+Step 1: Install Geth
+First, you need to install Geth on your computer. I'll provide instructions for installing Geth on Windows, but you can also install it on macOS or Linux.
+Visit the Geth downloads page: https://geth.ethereum.org/downloads/
+Download the appropriate Geth binary for your operating system (e.g., Windows, macOS, Linux).
+Follow the installation instructions for your operating system.
+Step 2: Create a Genesis Block Configuration
+To create a private Ethereum network, you need to define a custom Genesis block configuration. This Genesis block is the first block on your private blockchain.
+Create a JSON file (e.g., genesis.json) with your custom Genesis block configuration. Here's an example:
+json
+{
+  "config": {
+    "chainId": 12345,
+    "homesteadBlock": 0,
+    "eip150Block": 0,
+    "eip155Block": 0,
+    "eip158Block": 0,
+    "byzantiumBlock": 0,
+    "constantinopleBlock": 0,
+    "petersburgBlock": 0,
+    "istanbulBlock": 0,
+    "clique": {
+      "period": 15,
+      "epoch": 30000
+    }
+  },
+  "difficulty": "1",
+  "gasLimit": "8000000",
+  "alloc": {
+    "YOUR_ACCOUNT_ADDRESS": {
+      "balance": "1000000000000000000000000"
+    }
+  }
+}
+In the above example, replace YOUR_ACCOUNT_ADDRESS with the address where you want to pre-fund your initial Ether balance.
+Save the genesis.json file.
+Step 3: Initialize Your Private Ethereum Network
+Open a command prompt or terminal window and navigate to the directory where you saved the genesis.json file.
+Run the following command to initialize your private Ethereum network:
+shell
+geth --datadir ./privatechain init ./genesis.json
+This command initializes your private blockchain with the custom Genesis block configuration.
+Step 4: Start Your Private Ethereum Node
+To start your private Ethereum node, run the following command:
+shell
+geth --datadir ./privatechain --rpc --rpcaddr "localhost" --rpcport "8545" --rpcapi "eth,net,web3,personal,miner" --mine --minerthreads 1
+--datadir: Specifies the data directory for your private blockchain.
+--rpc: Enables the HTTP-RPC server.
+--rpcaddr and --rpcport: Set the address and port for the RPC server.
+--rpcapi: Specify the API methods you want to expose via RPC.
+--mine: Enables mining on your private network.
+--minerthreads: Number of CPU threads for mining (e.g., 1).
+Your private Ethereum node is now running, and you can interact with it using tools like Remix, web3.js, or other Ethereum development libraries.
+Remember that this private network is not connected to the public Ethereum network, and it's for testing and development purposes. The Genesis block configuration and network parameters can be customized further to meet your specific requirements.
+
+
+
+
+
+Output: 
+Smart Contract Code:
+pragma solidity >=0.5.0;
+
+
+contract Certificate {
+
+
+    /** Struct    **/
+
+
+    struct Cert {
+        string userName;
+        string id;
+        string courseName;
+        string issuingAuthority;
+        uint256 issueDate;
+        address user;
+        bool isAdded;
+    }
+
+
+
+
+    /** Mappings */
+
+
+    /** Mapping for certificates */
+    mapping (address => mapping(string => Cert)) public certificates;
+
+
+
+
+    /** Public functions */
+
+
+    function addCertificate(
+        string memory _userName,
+        string memory _id,
+        string memory _courseName,
+        string memory _issuingAuthority,
+        uint256 _issueDate,
+        address _user
+    ) public {
+        require(
+            certificates[_user][_id].isAdded == false,
+            "Certificate must not be already added."
+        );
+
+
+        require(
+            bytes(certificates[_user][_id].id).length == 0,
+            "Certificate id must be empty."
+        );
+
+
+        Cert memory cert = Cert({
+            userName: _userName,
+            id: _id,
+            courseName: _courseName,
+            issuingAuthority: _issuingAuthority,
+            issueDate: _issueDate,
+            user: _user,
+            isAdded: true
+        });
+
+
+        certificates[_user][_id] = cert;
+    }
+
+
+    function getCertificate(address _user, string memory _id)
+        public
+        view
+        returns(string memory, string memory, string memory, uint256) {
+            require(
+                _user != address(0),
+                "User address must not be empty"
+            );
+            require(
+                bytes(_id).length != 0,
+                "Certificate id must not be empty."
+            );
+
+
+            return (
+                certificates[_user][_id].userName,
+                certificates[_user][_id].issuingAuthority,
+                certificates[_user][_id].courseName,
+                certificates[_user][_id].issueDate
+            );
+    }
+}
