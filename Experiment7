@@ -1,0 +1,37 @@
+/* This a smart contract code for a ToDo List Web3 Application Execute this on Remix and Share the contract Abi */
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract ToDoList {
+    struct Task {
+        string content;
+        bool completed;
+    }
+
+    Task[] public tasks;
+
+    event TaskCreated(uint256 taskId, string content);
+    event TaskCompleted(uint256 taskId, bool completed);
+
+    function createTask(string memory _content) public {
+        uint256 taskId = tasks.length;
+        tasks.push(Task(_content, false));
+        emit TaskCreated(taskId, _content);
+    }
+
+    function completeTask(uint256 _taskId) public {
+        require(_taskId < tasks.length, "Task does not exist");
+        tasks[_taskId].completed = true;
+        emit TaskCompleted(_taskId, true);
+    }
+
+    function getTask(uint256 _taskId) public view returns (string memory content, bool completed) {
+        require(_taskId < tasks.length, "Task does not exist");
+        Task storage task = tasks[_taskId];
+        return (task.content, task.completed);
+    }
+
+    function getTaskCount() public view returns (uint256) {
+        return tasks.length;
+    }
+}
