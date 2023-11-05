@@ -1,2 +1,56 @@
 //_________EXPT3
 //__Aim: Create the genesis block using Puppeth, a CLI tool
+// This is a simpler and smaller json file than the one sir gave us:
+{
+     	"config":
+	{
+        	"chainId": 1,
+        	"homesteadBlock": 0,
+			"eip150Block": 0,
+        	"eip155Block": 0,
+        	"eip158Block": 0
+    	},
+
+	"difficulty": "0x4000",
+		"gasLimit": "2000000000000000",
+		"alloc":
+		{
+			"0x3071b5D42b54A2A3ab9873A7F4Ab307f950EC7E9": {"balance" : "1000"},
+			"0x4827C1CEB47a6013AC91D25aE5f5cD7c7729E821": {"balance" : "1000"}
+		}
+}
+/**save this as genesis.json file and follow these innstructions to install geth 
+Download Geth for Windows:
+Visit the official Ethereum website's "Geth & Tools" page to download the Geth installer for Windows:
+Geth & Tools - Ethereum
+Look for the Windows section and choose the appropriate installer for your system (e.g., 64-bit or 32-bit). 
+Download the installer file (it has a .msi extension).
+Run the Installer:
+Locate the downloaded .msi installer file and double-click on it to run the installer.
+Installation Wizard:
+
+The installation wizard will open. Click "Next" to proceed.
+
+Review the license agreement and accept it. Click "Next."
+
+Choose the installation directory or accept the default location. Click "Next."
+
+Choose whether you want to install the "Blockchain Data" and whether you want to create shortcuts. Adjust these options according to your preferences. Click "Next."
+
+Confirm your choices and click "Install."
+
+Complete Installation:
+The installer will copy files and complete the installation. Once finished, click "Finish."
+
+Verify Installation:
+To verify that geth has been successfully installed, open a Command Prompt (cmd.exe) and run the following command:
+geth version
+
+Now initialize a project directory by running the 'geth init' command.
+now save the genesis.json file in this root directory and execute the 'geth init genesis.json' command
+The output will be creation of genesis block with two accounts with 1000eth balance
+Run the following commmand to start the console:
+geth --http --http.api="eth,web3,miner,net,personal" --http.addr="127.0.0.1" --http.port="8545" --http.corsdomain="*" console
+now run this command in the console 'admin.nodeInfo'
+to retrieve the chain info
+and run this command to retrieve the balances ' eth.getBalance(eth.accounts[0])' Remeber account indexes start from 0. **/
