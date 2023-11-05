@@ -1,0 +1,67 @@
+/* Follow these steps before executing a smart contract in truffle environment
+  Install Node.js and npm:
+  Truffle and Ganache both rely on Node.js and npm. If you haven't already installed them, you can download and install them from the official website: https://nodejs.org/
+
+  Install Truffle:
+  Open your terminal or command prompt and run the following command to install Truffle globally:
+  'npm install -g truffle'
+
+  Install Ganache UI:
+  You can install Ganache UI by downloading it from the official website.
+  Visit the Ganache website at https://www.trufflesuite.com/ganache and
+  download the version that suits your operating system (Windows, macOS, or Linux).
+
+  Run Ganache UI:
+  After downloading Ganache UI, install it by following the installation instructions specific to your operating system.
+  Once installed, open Ganache UI.
+
+  Start Ganache:
+  Launch Ganache UI, and you'll see options to start a new workspace or open an existing one.
+  You can start a new workspace, which will create a new personal Ethereum blockchain for your development.
+  Click "Start" or "Quickstart" to initiate the blockchain.
+
+  Now run the 'truffle init' command in a desired directory where you installed truffle with npm to initialize the project.
+  Edit your truffle-config.json file to connect with ganache as follows */
+  module.exports = {
+  networks: {
+    development: {
+      host: "127.0.0.1",     // Ganache's default host
+      port: 7545,            // Ganache's default port
+      network_id: "*",       // Match any network ID
+    },
+  },
+};
+/* Now Execute the following smart contract by creating a file called Student.sol in the contract dir created by truffle*/
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract StudentBlockchain {
+    struct Student {
+        uint256 id;
+        string name;
+        uint256 age;
+    }
+
+    uint256 public totalStudents;
+    mapping(uint256 => Student) public students;
+
+    event StudentCreated(uint256 id, string name, uint256 age);
+
+    function createStudent(uint256 _id, string memory _name, uint256 _age) public {
+        students[totalStudents] = Student(_id, _name, _age);
+        totalStudents++;
+
+        emit StudentCreated(_id, _name, _age);
+    }
+}
+
+
+
+/* Compile and migrate your contracts:
+In your Truffle project directory, you can compile and migrate your smart contracts to the Ganache
+blockchain using the following Truffle commands:
+
+'truffle compile'
+'truffle migrate --network ganache'
+
+Share the contract hash with Sir*/
