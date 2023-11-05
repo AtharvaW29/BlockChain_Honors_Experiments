@@ -1,0 +1,24 @@
+/* In this experiment we shall be creating a contract to simulate transactions
+  between two accounts. Execute this file on remix IDE and share the contract ABI as proof!*/
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract TokenTransaction {
+    mapping(address => uint256) public balances;
+
+    event TokensTransferred(address indexed from, address indexed to, uint256 amount);
+
+    constructor() {
+        balances[msg.sender] = 100; // Assign 100 tokens to the contract deployer
+    }
+
+    function transferTokens(address to, uint256 amount) public {
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        
+        balances[msg.sender] -= amount;
+        balances[to] += amount;
+
+        emit TokensTransferred(msg.sender, to, amount);
+    }
+}
+/* Note this is a boiler plate code customize as you wish */
